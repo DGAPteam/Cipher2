@@ -11,6 +11,6 @@ char bit_search(char *a, int m) { //возвращает значение бит
 	return ((1 << 7 - (m % 8))  &  a[(m / 8)]) >> 7 - (m % 8);
 }
 
-void cyclic_shift_right(char *a, int m) { //сдвигает на m бит вправо
-	
-}
+//void cyclic_shift_right(char *a, int m) { //сдвигает на m бит вправо
+//
+//}

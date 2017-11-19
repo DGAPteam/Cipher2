@@ -1,4 +1,5 @@
-#include <stdlib,h>
+#include <stdlib.h>
+#include <stdio.h>
 #include "keygen.h"
 #include "bitwise.h"
 
@@ -36,6 +37,14 @@ char **keys_create(char *key_null) { //создается 16 ключей, дл�
 	char **keys = malloc(16 * sizeof(char *));
 	int i;
 	char *key_null_new = key_change(key_null);
-	char *C = malloc(3 * sizeof(char)), *D = malloc(3 * sizeof(char));
+	char *C = malloc(8 * sizeof(char)), *D = malloc(8 * sizeof(char));
+	for (i = 0; i < 32; i++) {
+		if(i % 8 != 7)
+			bit_add(C, i - (i/8), bit_search(key_null_new, i));	
+	}
+	for (i = 32; i < 64; i++) {
+		if(i % 8 != 7)
+			bit_add(D, i - (i/8) - 28, bit_search(key_null_new, i));	
+	}
 	return keys;
 }
