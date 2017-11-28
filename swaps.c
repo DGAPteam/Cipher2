@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include "swaps.h"
 
 char *swapstart(char *block) {
 	char *zz = (char*)malloc(8 * sizeof(char));
