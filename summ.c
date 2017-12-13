@@ -1,4 +1,4 @@
-void bit_add(char *a, int m, char x) { //добавляет бит x в позицию m
+ты void bit_add(char *a, int m, char x) { //добавляет бит x в позицию m
 	if(x == 1)
 		a[(m / 8)] |= (1 <<  7 - (m % 8));
 	else
@@ -10,7 +10,7 @@ char bit_search(char *a, int m) { //возвращает значение бита m
 }
 
 
-char* expansion(char**m)//Передается указатель на указатель на блок, функция расширения
+char* expansion(char**m)//peredaetsya ukazatel' na ukazatel' na blok, function rasshireniya
 {
     int i;
     char* pi = m[4];
@@ -66,7 +66,7 @@ char* expansion(char**m)//Передается указатель на указатель на блок, функция рас
     return k ;
 }
 
-void bit_change(char** m/*Указатель на указатель на чар для текущего полублока*/, char** mk/*Указатель на указатель на ключ*/) //правый полублок
+void bit_change(char** m/*ukazatel' na ukazatel' na char tekushego polubloka*/, char** mk/*ukazatel' na ukazatel' na kluch*/) //praviy polublock
 {
     int i ;
     for (i = 0; i < 48; i ++)
@@ -77,7 +77,7 @@ char** transformation_s(char** m)
 {
     int x, y;
     char **p ;
-    *p = malloc(sizeof(char)*4) ; // 1 чар - 8 бит
+    *p = malloc(sizeof(char)*4) ; // 1 char - 8 bit
     char S[8][64] =
     {{14,4,13,1,2,15,11,8,3,10,6,12,5,9,0,7,
     0,15,7,4,14,2,13,1,10,6,12,11,9,5,3,8,
@@ -114,28 +114,28 @@ char** transformation_s(char** m)
     int i , j = 0, k , l;
     for (i = 0 ; i < 48; i += 8)
     {
-        x = (int)(*(*m+8*i)) - 48 + 2*((int)(*(*m+8*i + 5) - 48)) ; // y - координата в таблице S
-        y = (int)(*(*m+8*i + 1)) - 48 + 2*((int)(*(*m+8*i + 2) - 48)) + 4*((int)(*(*m+8*i + 3) - 48)) + 8*((int)(*(*m+8*i + 4) - 48)) ; // х - координата в таблице S
+        x = (int)(*(*m+8*i)) - 48 + 2*((int)(*(*m+8*i + 5) - 48)) ; // y - koordinata v S
+        y = (int)(*(*m+8*i + 1)) - 48 + 2*((int)(*(*m+8*i + 2) - 48)) + 4*((int)(*(*m+8*i + 3) - 48)) + 8*((int)(*(*m+8*i + 4) - 48)) ; // х - koordinata v S
         l = S[x*8][y*16] ;
         for ( k = 0; k < 4; k ++)
         {
             bit_add(*p,j+3-k, l % 2);
             l /= 2 ;
         }
-        j += k + 1; // Увеличиваю на 4 единицы
+        j += k + 1; // uvelichivayu na 4
     }
     return p ;
 }
 
-char* FinalP(char **x)// Принимаем указатель на указатель на матрицу размера 32 после S-преобразования
+char* FinalP(char **x)// Prinimayu ukazatel' na ukazatel' na matrice razmera 32 posle s - preobrazovaniya
 {
-    char map[32]={16,7,20,21,29,12,28,17,1,15,23,26,5,18,31,10,2,8,24,14,32,27,3,9,19,13,30,6,22,11,4,25}; // перестановка P
+    char map[32]={16,7,20,21,29,12,28,17,1,15,23,26,5,18,31,10,2,8,24,14,32,27,3,9,19,13,30,6,22,11,4,25}; // perestanovka P
     char * r = malloc(sizeof(char)*4) ;
     int i, j ;
     for (i = 0; i < 4; i ++)
         for (j = 0; j < 8; j ++)
-            bit_add(*r, 4*i+j,*(*x+map[4*i+j]));// добавляем map[i*4+j]-ый элемент на i*4+j-тое место
-    return r ; //  вовзращаем перестановочную матрицу
+            bit_add(*r, 4*i+j,*(*x+map[4*i+j]));// dobavlyaem map[i*4+j]-iy element na i*4+j-toe mesto
+    return r ; //  vozvrashaem perestanovochnuyy matricu
 }
 
 void blocks_break(char *elements, int maxN)//Разбивание исходного текста на блоки
