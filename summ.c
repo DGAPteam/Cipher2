@@ -57,7 +57,6 @@ char* expansion(char* m)//peredaetsya ukazatel' na ukazatel' na blok, function r
     return k ;
 }
 
-
 char* keyxor(char *m, char *key) // bit change ne nujen vse realizovano zdes'
 {
     int i ;
@@ -122,16 +121,13 @@ char* transformation_s(char* m) //peredaem ukazatel' na block
     return p ;
 }
 
-void SWAP_block(char *r, char *l)
+void SWAP_blocks(char **r, char **l)
 {
     int i ;
-    char c ;
-    for (i = 0; i < 4; i ++)
-    {
-        c =  r[i] ;
-        r[i] = l[i] ;
-        l[i] = c ;
-    }
+    char *c ;
+    c =  *r ;
+    *r = *l ;
+    *l = c ;
 }
 
 char **blocks_break(char *elements)
