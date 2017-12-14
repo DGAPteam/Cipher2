@@ -1,5 +1,19 @@
 #include "summ.h"
+<<<<<<< HEAD
 #include "bitwise.h"
+=======
+
+void bit_add(char *a, int m, char x) { //добавляет бит x в позицию m
+	if(x == 1)
+		a[(m / 8)] |= (1 <<  7 - (m % 8));
+	else
+		a[(m / 8)] &= ~(1 <<  7 - (m % 8));
+}
+
+char bit_search(char *a, int m) { //возвращает значение бита m
+	return ((1 << 7 - (m % 8))  &  a[(m / 8)]) >> 7 - (m % 8);
+}
+>>>>>>> refs/remotes/origin/master
 
 char* expansion(char* m)//peredaetsya ukazatel' na ukazatel' na blok, function rasshireniya
 {
@@ -61,11 +75,16 @@ char* expansion(char* m)//peredaetsya ukazatel' na ukazatel' na blok, function r
 char* keyxor(char *m, char *key) // bit change ne nujen vse realizovano zdes'
 {
     int i ;
+<<<<<<< HEAD
     char* gen ;
     gen = malloc(sizeof(char)*6) ;
     for (i = 0; i < 48; i ++)
         bit_add(gen, i, (bit_search(m,i) ^ bit_search(key,i))) ;
     return  gen ;
+=======
+    for (i = 0; i < 6; i ++)
+            *(*m + i) ^= *(*mk + i) ;
+>>>>>>> refs/remotes/origin/master
 }
 
 char* transformation_s(char* m) //peredaem ukazatel' na block
@@ -122,6 +141,7 @@ char* transformation_s(char* m) //peredaem ukazatel' na block
     return p ;
 }
 
+<<<<<<< HEAD
 void SWAP_block(char *r, char *l)
 {
     int i ;
@@ -153,4 +173,9 @@ char **blocks_break(char *elements)
         bloks[i][j] = 0;
         }
 return bloks;
+=======
+void blocks_break(char *elements)
+{
+    
+>>>>>>> refs/remotes/origin/master
 }
