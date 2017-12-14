@@ -117,7 +117,7 @@ char* transformation_s(char* m) //peredaem ukazatel' na block
             bit_add(p, j + 3 - k, l % 2);
             l /= 2 ;
         }
-        j += k + 1; // uvelichivayu na 4
+        j += 4; // uvelichivayu na 4
     }
     return p ;
 }
