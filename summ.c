@@ -1,22 +1,25 @@
 #include "summ.h"
+<<<<<<< HEAD
+#include "bitwise.h"
+=======
 
 void bit_add(char *a, int m, char x) { //добавляет бит x в позицию m
-	if(x == 1)
-		a[(m / 8)] |= (1 <<  7 - (m % 8));
-	else
-		a[(m / 8)] &= ~(1 <<  7 - (m % 8));
+    if(x == 1)
+        a[(m / 8)] |= (1 <<  7 - (m % 8));
+    else
+        a[(m / 8)] &= ~(1 <<  7 - (m % 8));
 }
 
 char bit_search(char *a, int m) { //возвращает значение бита m
-	return ((1 << 7 - (m % 8))  &  a[(m / 8)]) >> 7 - (m % 8);
+    return ((1 << 7 - (m % 8))  &  a[(m / 8)]) >> 7 - (m % 8);
 }
+>>>>>>> refs/remotes/origin/master
 
-
-char* expansion(char**m)//peredaetsya ukazatel' na ukazatel' na blok, function rasshireniya
+char* expansion(char* m)//peredaetsya ukazatel' na ukazatel' na blok, function rasshireniya
 {
     int i;
-    char* pi = m[4];
-    char* k = (char*)malloc(sizeof(char)*6) ;
+    char* pi = m;
+    char* k = malloc(sizeof(char)*6) ;
     bit_add(k, 0, bit_search(pi,31));
     bit_add(k, 1, bit_search(pi,0));
     bit_add(k, 2, bit_search(pi,1));
@@ -68,17 +71,26 @@ char* expansion(char**m)//peredaetsya ukazatel' na ukazatel' na blok, function r
     return k ;
 }
 
-void bit_change(char** m/*ukazatel' na ukazatel' na char tekushego polubloka*/, char** mk/*ukazatel' na ukazatel' na kluch*/) //praviy polublock
+
+char* keyxor(char *m, char *key) // bit change ne nujen vse realizovano zdes'
 {
     int i ;
+<<<<<<< HEAD
+    char* gen ;
+    gen = malloc(sizeof(char)*6) ;
+    for (i = 0; i < 48; i ++)
+        bit_add(gen, i, (bit_search(m,i) ^ bit_search(key,i))) ;
+    return  gen ;
+=======
     for (i = 0; i < 6; i ++)
             *(*m + i) ^= *(*mk + i) ;
+>>>>>>> refs/remotes/origin/master
 }
 
-char** transformation_s(char** m)
+char* transformation_s(char* m) //peredaem ukazatel' na block
 {
     int x, y;
-    char **p ;
+    char *p ;
     *p = malloc(sizeof(char)*4) ; // 1 char - 8 bit
     char S[8][64] =
     {{14,4,13,1,2,15,11,8,3,10,6,12,5,9,0,7,
@@ -114,14 +126,14 @@ char** transformation_s(char** m)
     7,11,4,1,9,12,14,2,0,6,10,13,15,3,5,8,
     2,1,14,7,4,10,8,13,15,12,9,0,3,5,6,11}};
     int i , j = 0, k , l;
-    for (i = 0 ; i < 48; i += 8)
+    for (i = 0 ; i < 48; i += 6)
     {
-        x = (int)(*(*m+8*i)) - 48 + 2*((int)(*(*m+8*i + 5) - 48)) ; // y - koordinata v S
-        y = (int)(*(*m+8*i + 1)) - 48 + 2*((int)(*(*m+8*i + 2) - 48)) + 4*((int)(*(*m+8*i + 3) - 48)) + 8*((int)(*(*m+8*i + 4) - 48)) ; // х - koordinata v S
-        l = S[x*8][y*16] ;
+        x = (int)bit_search(m[i/8], 6 * i % 8) + 2*((int)bit_search(m[i/8], 6 * i % 8 + 5)) ; // y - koordinata v S
+        y = (int)bit_search(m[i/8], 6 * i % 8 + 1) + 2*((int)bit_search(m[i/8], 6 * i % 8 + 2)) + 4*((int)bit_search(m[i/8], 6 * i % 8 + 3) ) + 8*((int)bit_search(m[i/8], 6 * i % 8 + 4)) ; // х - koordinata v S
+        l = S[i/6][x*16+y] ;
         for ( k = 0; k < 4; k ++)
         {
-            bit_add(*p,j+3-k, l % 2);
+            bit_add(p, j + 3 - k, l % 2);
             l /= 2 ;
         }
         j += k + 1; // uvelichivayu na 4
@@ -129,23 +141,41 @@ char** transformation_s(char** m)
     return p ;
 }
 
+<<<<<<< HEAD
+void SWAP_block(char *r, char *l)
+{
+    int i ;
+    char c ;
+    for (i = 0; i < 4; i ++)
+    {
+        c =  r[i] ;
+        r[i] = l[i] ;
+        l[i] = c ;
+    }
+}
+
 char **blocks_break(char *elements)
 {
     int Nmax = 0, i, j;
-    while (elements[Nmax] != 0x0 && elements[Nmax] != '\n')   
-        Nmax++;
+    while (elements[Nmax] != 0x0 && elements[Nmax] != '\n')
+    Nmax ++;
     if (Nmax % 8 == 0)
-        k = Nmax / 8;
+    k = Nmax / 8;
     else
-        k = Nmax / 8 + 1;
+    k = Nmax / 8 + 1;
     char **bloks = malloc(k * sizeof(char *));
     for (i = 0; i < k; i++) {
         bloks[i] = malloc(8 * sizeof(char));
         for (j = 0; j < 8; j++)
             if (i*8 + j < Nmax)
-                bloks[i][j] = elements[i*8 + j];
-            else
-                bloks[i][j] = 0;
-    }
-    return bloks;
+        bloks[i][j] = elements[i*8 + j];
+        else
+        bloks[i][j] = 0;
+        }
+return bloks;
+=======
+void blocks_break(char *elements)
+{
+    
+>>>>>>> refs/remotes/origin/master
 }
