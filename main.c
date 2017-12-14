@@ -11,16 +11,29 @@ int k;
 int main() {
 	char str[10000];
 	scanf("%s", str);
+	
 	char * key = random_key();
 	printf("key : %s\n" key);
 	char ** all_keys = keys_create(key);
 	char ** blocks = blocks_break(str);
 	char * hash;
+	
 	int i;
 	for (i = 0; i < k; i++) {
 		hash = blocks[i];
 		blocks[i] = swapstart(blocks[i]);
 		free(hash);
 	}
+	
+	char * right;
+	char * left;
+	for (i = 0; i < k; i++)
+		for (j = 0; j < 16; j++){
+			right = expansion(blocks[j] + 4);
+			left = blocks[j];
+			hash = right;
+			right = keyxor(right, all_keys[i]);
+			free(hash);
+		}
 	return 0;
 }
