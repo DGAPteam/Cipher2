@@ -5,9 +5,11 @@ void bit_add(char *, int, char);
 
 char bit_search(char *, int);
 
-void bit_change(char** , char** , int);
-
 char* expansion(char**);
+
+void bit_change(char** , char**);
+
+char** transformation_s(char** )
 
 void blocks_break(char *, int);
 

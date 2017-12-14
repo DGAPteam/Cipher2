@@ -1,4 +1,6 @@
-ты void bit_add(char *a, int m, char x) { //добавляет бит x в позицию m
+#include "summ.h"
+
+void bit_add(char *a, int m, char x) { //добавляет бит x в позицию m
 	if(x == 1)
 		a[(m / 8)] |= (1 <<  7 - (m % 8));
 	else
@@ -69,7 +71,7 @@ char* expansion(char**m)//peredaetsya ukazatel' na ukazatel' na blok, function r
 void bit_change(char** m/*ukazatel' na ukazatel' na char tekushego polubloka*/, char** mk/*ukazatel' na ukazatel' na kluch*/) //praviy polublock
 {
     int i ;
-    for (i = 0; i < 48; i ++)
+    for (i = 0; i < 6; i ++)
             *(*m + i) ^= *(*mk + i) ;
 }
 
@@ -127,26 +129,7 @@ char** transformation_s(char** m)
     return p ;
 }
 
-char* FinalP(char **x)// Prinimayu ukazatel' na ukazatel' na matrice razmera 32 posle s - preobrazovaniya
+void blocks_break(char *elements)
 {
-    char map[32]={16,7,20,21,29,12,28,17,1,15,23,26,5,18,31,10,2,8,24,14,32,27,3,9,19,13,30,6,22,11,4,25}; // perestanovka P
-    char * r = malloc(sizeof(char)*4) ;
-    int i, j ;
-    for (i = 0; i < 4; i ++)
-        for (j = 0; j < 8; j ++)
-            bit_add(*r, 4*i+j,*(*x+map[4*i+j]));// dobavlyaem map[i*4+j]-iy element na i*4+j-toe mesto
-    return r ; //  vozvrashaem perestanovochnuyy matricu
-}
-
-void blocks_break(char *elements, int maxN)//Разбивание исходного текста на блоки
-{                                               // maxN - Количество элементов во входном потоке задается в main
-    int i ;
-    int l = maxN - (maxN/8)*8 ;
-    for (i = maxN; i < maxN +(8-l) ; i ++)
-        *(elements+i) = 0 ;
-    maxN += l ;
-    char **block ;
-    block = (char**)malloc(sizeof(char)*(maxN/8)) ;
-    for (i = 0; i < maxN/8; i ++)
-        block[i] = elements+i*8 ;
+    
 }
