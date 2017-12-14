@@ -9,8 +9,8 @@ char* expansion(char**);
 
 void bit_change(char** , char**);
 
-char** transformation_s(char** )
+char** transformation_s(char** );
 
-void blocks_break(char *, int);
+char **blocks_break(char *);
 
 #endif

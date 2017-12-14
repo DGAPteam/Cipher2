@@ -129,7 +129,23 @@ char** transformation_s(char** m)
     return p ;
 }
 
-void blocks_break(char *elements)
+char **blocks_break(char *elements)
 {
-    
+    int Nmax = 0, i, j;
+    while (elements[Nmax] != 0x0 && elements[Nmax] != '\n')   
+        Nmax++;
+    if (Nmax % 8 == 0)
+        k = Nmax / 8;
+    else
+        k = Nmax / 8 + 1;
+    char **bloks = malloc(k * sizeof(char *));
+    for (i = 0; i < k; i++) {
+        bloks[i] = malloc(8 * sizeof(char));
+        for (j = 0; j < 8; j++)
+            if (i*8 + j < Nmax)
+                bloks[i][j] = elements[i*8 + j];
+            else
+                bloks[i][j] = 0;
+    }
+    return bloks;
 }
