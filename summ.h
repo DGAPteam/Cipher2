@@ -1,15 +1,13 @@
 #ifndef CIPHER_SUMM_H
 #define CIPHER_SUMM_H
 
-void bit_add(char *, int, char);
+char* expansion(char*);
 
-char bit_search(char *, int);
+char* keyxor(char *, char *);
 
-char* expansion(char**);
+char* transformation_s(char* );
 
-void bit_change(char** , char**);
-
-char** transformation_s(char** );
+void SWAP_block(char *, char *);
 
 char **blocks_break(char *);
 
