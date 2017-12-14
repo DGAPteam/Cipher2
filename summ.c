@@ -109,8 +109,8 @@ char* transformation_s(char* m) //peredaem ukazatel' na block
     int j = 0, k , l;
     for (i = 0 ; i < 48; i += 6)
     {
-        x = bit_search((m + i/8), 6 * i % 8) + 2*(bit_search((m + i/8), 6 * i % 8 + 5)) ; // y - koordinata v S
-        y = bit_search((m + i/8), 6 * i % 8 + 1) + 2*(bit_search((m + i/8), 6 * i % 8 + 2)) + 4*(bit_search((m + i/8), 6 * i % 8 + 3) ) + 8*(bit_search((m + i/8), 6 * i % 8 + 4)) ; // o - koordinata v S
+        x = bit_search(m, i) + 2*(bit_search(m, i + 5)) ; // y - koordinata v S
+        y = bit_search(m, i + 1) + 2*(bit_search(m, i+ 2)) + 4*(bit_search(m, i + 3) ) + 8*(bit_search(m , i + 4)) ; // o - koordinata v S
         l = S[i/6][x*16+y] ;
         for ( k = 0; k < 4; k ++)
         {
