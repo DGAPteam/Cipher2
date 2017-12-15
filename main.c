@@ -7,18 +7,23 @@
 
 
 int main() {
-	int i,j, k;
+	int i = 0,j, k;
 	char str[100000];
-
-	scanf("%s", str);
+	int c;
+	while ((c = getchar())!='\n') {
+		str[i] = c;
+		i++;
+	}
+	str[i] = 0x0;
 	int m;
 	char ** blocks = blocks_break(str, &m); 
 
 	char * key = random_key();
 	char ** all_keys = keys_create(key);
 	printf("KEY :");
-	for (i = 0; i < 7; i++)
-		printf("%c ", key[i]);
+	for (i = 0; i < 6; i+=2)
+		printf("%hX ", key[i]*256 + key[i+1]);
+	printf("%hX ", key[6]*256);
 	free(key);
 	printf("\n");
 
@@ -72,8 +77,8 @@ int main() {
 
 
 	for (i = 0; i < m; i++)
-		for (j = 0; j < 8; j++)
-			printf("%c", blocks[i][j]);
+		for (j = 0; j < 8; j+=2)
+			printf("%hX ", blocks[i][j] * 256 + blocks[i][j+1]);
 
 	printf("\n");
 
