@@ -59,25 +59,23 @@ char **keys_create(char *key_null) { //создается 16 ключей, дл�
 			bit_add(C, i - (i/8), bit_search(key_null_new, i));	
 	}
 
+	
+
 	for (i = 32; i < 64; i++) {
 		if(i % 8 != 7)
 			bit_add(D, i - (i/8) - 28, bit_search(key_null_new, i));	
 	}
-
-	for (j = 0; j < 28; j++)
-			printf("%d ", bit_search(D, j));
-	printf("\n");
-
 	for (i = 0; i < 16; i++) {
-		cyclic_shift_right(C, move[i]);
-		cyclic_shift_right(D, move[i]);
+		cyclic_shift_left(C, move[i]);
+		cyclic_shift_left(D, move[i]);
 		keys[i] = malloc(6 * sizeof(char));
 		for (j = 0; j < 48; j++) {
-			if (map[j] > 32)
-				bit_add(keys[i], j, bit_search(D, map[j] % 32 - 1));
+			if (map[j] > 28)
+				bit_add(keys[i], j, bit_search(D, map[j] - 28 - 1));
 			else
 				bit_add(keys[i], j, bit_search(C, map[j] - 1));
 		}
 	}
+	
 	return keys;
 }

@@ -5,6 +5,6 @@ void bit_add(char *, int, char);
 
 char bit_search(char *, int);
 
-void cyclic_shift_right(char *, int);
+void cyclic_shift_left(char *, int );
 
 #endif

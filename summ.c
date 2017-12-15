@@ -1,5 +1,15 @@
 #include "summ.h"
 #include "bitwise.h"
+#include <stdlib.h>
+
+char *Perestanovkap (char *block) {
+    char *zz = (char*)malloc(4 * sizeof(char));
+    int table[32] = {16,7,20,21,29,12,28,17,1,15,23,26,5,18,31,10,2,8,24,14,32,27,3,9,19,13,30,6,22,11,4,25};
+    int i;
+    for (i = 0; i < 32; ++i)
+        bit_add(zz, i, bit_search(block, table[i] - 1));
+    return zz;
+}
 
 char* expansion(char* m)//peredaetsya ukazatel' na ukazatel' na blok, function rasshireniya
 {
@@ -57,12 +67,12 @@ char* expansion(char* m)//peredaetsya ukazatel' na ukazatel' na blok, function r
     return k ;
 }
 
-char* keyxor(char *m, char *key) // bit change ne nujen vse realizovano zdes'
+char* keyxor(char *m, char *key, int l) // bit change ne nujen vse realizovano zdes'
 {
     int i ;
     char* gen ;
-    gen = malloc(sizeof(char)*6) ;
-    for (i = 0; i < 48; i ++)
+    gen = malloc(sizeof(char)*(l/8)) ;
+    for (i = 0; i < l; i ++)
         bit_add(gen, i, (bit_search(m,i) ^ bit_search(key,i))) ;
     return  gen ;
 }
@@ -109,8 +119,8 @@ char* transformation_s(char* m) //peredaem ukazatel' na block
     int j = 0, k , l;
     for (i = 0 ; i < 48; i += 6)
     {
-        x = bit_search(m, i) + 2*(bit_search(m, i + 5)) ; // y - koordinata v S
-        y = bit_search(m, i + 1) + 2*(bit_search(m, i+ 2)) + 4*(bit_search(m, i + 3) ) + 8*(bit_search(m , i + 4)) ; // o - koordinata v S
+        x = 2*bit_search(m, i) + (bit_search(m, i + 5)) ; // y - koordinata v S
+        y = 8*bit_search(m, i + 1) + 4*(bit_search(m, i+ 2)) + 2*(bit_search(m, i + 3) ) + (bit_search(m , i + 4)) ; // o - koordinata v S
         l = S[i/6][x*16+y] ;
         for ( k = 0; k < 4; k ++)
         {
@@ -131,15 +141,15 @@ void SWAP_blocks(char **r, char **l)
     *l = c ;
 }
 
-char **blocks_break(char *elements)
+char **blocks_break(char *elements, int *m)
 {
-    int Nmax = 0, i, j;
+    int Nmax = 0, i, j, k;
     while (elements[Nmax] != 0x0 && elements[Nmax] != '\n')
     Nmax ++;
     if (Nmax % 8 == 0)
-    k = Nmax / 8;
+        k = Nmax / 8;
     else
-    k = Nmax / 8 + 1;
+        k = Nmax / 8 + 1;
     char **bloks = malloc(k * sizeof(char *));
     for (i = 0; i < k; i++) {
         bloks[i] = malloc(8 * sizeof(char));
@@ -149,5 +159,6 @@ char **blocks_break(char *elements)
         else
         bloks[i][j] = 0;
     }
+    *m = k;
     return bloks;
 }
