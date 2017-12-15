@@ -22,7 +22,7 @@ int main() {
 	free(key);
 	printf("\n");
 
-	for (k = 0; k < m; k++) {
+	for (k = 0; k < m; k++) {//шифрование
 		char * hash;
 		
 		hash = blocks[k];
@@ -77,7 +77,7 @@ int main() {
 
 	printf("\n");
 
-	for (k = 0; k < m; k++) {
+	for (k = 0; k < m; k++) {//Расшифровка
 		
 		char * hash;
 		
@@ -131,6 +131,8 @@ int main() {
 		for (j = 0; j < 8; j++)
 			printf("%c", blocks[i][j]);
 	printf("\n");
+	
+
 	for (i = 0; i < 16; i++)
 		free(all_keys[i]);
 	free(all_keys);
