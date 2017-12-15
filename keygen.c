@@ -1,12 +1,14 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <time.h> 
 #include "keygen.h"
 #include "bitwise.h"
 
 char *random_key() { //выдает рандомный ключ
 	char *a =malloc(7*sizeof(char));
 	int i;
-	for (i = 0; i < 8; i++)
+	srand(time(NULL));
+	for (i = 0; i < 7; i++)
 		a[i] = rand() % 256;
 	return a;
 }
@@ -76,6 +78,8 @@ char **keys_create(char *key_null) { //создается 16 ключей, дл�
 				bit_add(keys[i], j, bit_search(C, map[j] - 1));
 		}
 	}
-	
+	free (C);
+	free (D);
+	free (key_null_new);
 	return keys;
 }

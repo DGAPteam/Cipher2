@@ -145,7 +145,7 @@ char **blocks_break(char *elements, int *m)
 {
     int Nmax = 0, i, j, k;
     while (elements[Nmax] != 0x0 && elements[Nmax] != '\n')
-    Nmax ++;
+        Nmax ++;
     if (Nmax % 8 == 0)
         k = Nmax / 8;
     else
