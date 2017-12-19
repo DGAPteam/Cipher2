@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include "swaps.h"
 
-char *swapstart(char *block) {
+char *swapstart(char *block) { //Начальная перестановка
     char *zz = (char*)malloc(8 * sizeof(char));
     int table[8] = {2,4,6,8,1,3,5,7};
     int i, j;
@@ -14,7 +14,7 @@ char *swapstart(char *block) {
     return zz;
 }
 
-char *swapend (char *block) {
+char *swapend (char *block) { //Конечная перестановка
     char *zz = (char*)malloc(8 * sizeof(char));
     int table[8] = {4,0,5,1,6,2,7,3};
     int i, j;

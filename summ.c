@@ -2,7 +2,7 @@
 #include "bitwise.h"
 #include <stdlib.h>
 
-char *Perestanovkap (char *block) {
+char *Perestanovkap (char *block) { //Перестановка P
     char *zz = (char*)malloc(4 * sizeof(char));
     int table[32] = {16,7,20,21,29,12,28,17,1,15,23,26,5,18,31,10,2,8,24,14,32,27,3,9,19,13,30,6,22,11,4,25};
     int i;
@@ -141,8 +141,7 @@ void SWAP_blocks(char **r, char **l)
     *l = c ;
 }
 
-char **blocks_break(char *elements, int *m)
-{
+char **blocks_break(char *elements, int *m) { //Разделение на блоки
     int Nmax = 0, i, j, k;
     while (elements[Nmax] != 0x0 && elements[Nmax] != '\n')
         Nmax ++;
