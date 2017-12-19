@@ -5,9 +5,39 @@
 #include "summ.h"
 #include "swaps.h"
 
+void print (char * s, int a) {
+	int m;
+	if (a == 1)
+		m = 8*bit_search(s,0) + 4*bit_search(s,1) + 2*bit_search(s,2) + bit_search(s,3);
+	else
+		m = 8*bit_search(s,4) + 4*bit_search(s,5) + 2*bit_search(s,6) + bit_search(s,7);
+	switch (m) {
+		case 15 :
+			printf("F");
+			break;
+		case 14 :
+			printf("E");
+			break;
+		case 13 :
+			printf("D");
+			break;
+		case 12 :
+			printf("C");
+			break;
+		case 11 :
+			printf("B");
+			break;
+		case 10 :
+			printf("A");
+			break;
+		default :
+			printf("%d", m);
+	}
+}
 
 int main() {
 	int i = 0,j, k;
+	printf("Введите сообщение:\n");
 	char str[100000];
 	int c;
 	while ((c = getchar())!='\n') {
@@ -21,9 +51,11 @@ int main() {
 	char * key = random_key();
 	char ** all_keys = keys_create(key);
 	printf("KEY :");
-	for (i = 0; i < 6; i+=2)
-		printf("%hX ", key[i]*256 + key[i+1]);
-	printf("%hX ", key[6]*256);
+	for (i = 0; i < 7; i++) {
+		print(key + i, 1);
+		print(key + i, 2);
+		printf(" ");
+	}
 	free(key);
 	printf("\n");
 
@@ -75,10 +107,13 @@ int main() {
 		free(hash);
 	}
 
-
+	printf("Зашифрованное сообщение в шестанцатиричной системе\n");
 	for (i = 0; i < m; i++)
-		for (j = 0; j < 8; j+=2)
-			printf("%hX ", blocks[i][j] * 256 + blocks[i][j+1]);
+		for (j = 0; j < 8; j++) {
+			print(blocks[i] + j, 1);
+			print(blocks[i] + j, 2);
+			printf(" ");
+		}
 
 	printf("\n");
 
@@ -131,7 +166,7 @@ int main() {
 	}
 
 
-
+	printf("Ваше сообщение:\n");
 	for (i = 0; i < m; i++)
 		for (j = 0; j < 8; j++)
 			printf("%c", blocks[i][j]);
