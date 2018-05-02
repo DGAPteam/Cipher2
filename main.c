@@ -1,3 +1,4 @@
+#include <time.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include "keygen.h"
@@ -45,68 +46,77 @@ int main() {
 		i++;
 	}
 	str[i] = 0x0;
-	int m;
+	int m, d;
+
+	//Разбиение на блоки
 	char ** blocks = blocks_break(str, &m); 
 
-	char * key = random_key();
-	char ** all_keys = keys_create(key);
-	printf("KEY :");
-	for (i = 0; i < 7; i++) {
-		print(key + i, 1);
-		print(key + i, 2);
-		printf(" ");
-	}
-	free(key);
-	printf("\n");
+	srand(time(NULL));
+	char * key[3];
+	for (d = 0; d < 3; d++) {//TripleDES
+		//Создание ключа
+		key[d] = random_key();
+		char ** all_keys = keys_create(key[d]);
+	
+		printf("KEY%d :", d + 1);
+		for (i = 0; i < 7; i++) {
+			print(key[d] + i, 1);
+			print(key[d] + i, 2);
+			printf(" ");
+		}
+		printf("\n");
 
-	for (k = 0; k < m; k++) {//шифрование
-		char * hash;
-		
-		hash = blocks[k];
-		blocks[k] = swapstart(blocks[k]);
-		free(hash);
+		for (k = 0; k < m; k++) {//шифрование
+			char * hash;
+			hash = blocks[k];
+			blocks[k] = swapstart(blocks[k]);
+			free(hash);
 
-		for(i = 0; i < 16; i++) {
-			char * right, rightnull[4] = {blocks[k][4],blocks[k][5],blocks[k][6],blocks[k][7]};
-			char * left = blocks[k];
+			for(i = 0; i < 16; i++) {
+				char * right, rightnull[4] = {blocks[k][4],blocks[k][5],blocks[k][6],blocks[k][7]};
+				char * left = blocks[k];
 			
-			right = expansion(blocks[k]+4);
+				right = expansion(blocks[k]+4);
 			
-			hash = right;
-			right = keyxor(right,all_keys[i], 48);
-			free(hash);
+				hash = right;
+				right = keyxor(right,all_keys[i], 48);
+				free(hash);
 			
-			hash =right;
-			right = transformation_s(right);
-			free(hash);
+				hash =right;
+				right = transformation_s(right);
+				free(hash);
 
-			hash = right;
-			right = Perestanovkap(right);
-			free(hash);
+				hash = right;
+				right = Perestanovkap(right);
+				free(hash);
 
-			hash = right;
-			right = keyxor(right,left, 32);
-			free(hash);
+				hash = right;
+				right = keyxor(right,left, 32);
+				free(hash);
 
+				for (j = 0; j < 4; j++) {
+					blocks[k][j] = rightnull[j];
+					blocks[k][j+4] = right[j];
+				}
+
+				free(right);
+			}
 			for (j = 0; j < 4; j++) {
-				blocks[k][j] = rightnull[j];
-				blocks[k][j+4] = right[j];
+				char change_a;
+				change_a = blocks[k][j];
+				blocks[k][j] = blocks[k][j+4];
+				blocks[k][j+4]= change_a;
 			}
 
-			free(right);
+			hash = blocks[k];
+			blocks[k] = swapend(blocks[k]);
+			free(hash);
 		}
-		for (j = 0; j < 4; j++) {
-			char change_a;
-			change_a = blocks[k][j];
-			blocks[k][j] = blocks[k][j+4];
-			blocks[k][j+4]= change_a;
-		}
-
-		hash = blocks[k];
-		blocks[k] = swapend(blocks[k]);
-		free(hash);
+		for (i = 0; i < 16; i++)
+			free(all_keys[i]);
+		free(all_keys);
 	}
-
+	//вывод
 	printf("Зашифрованное сообщение в шестанцатиричной системе\n");
 	for (i = 0; i < m; i++)
 		for (j = 0; j < 8; j++) {
@@ -116,55 +126,60 @@ int main() {
 		}
 
 	printf("\n");
-
-	for (k = 0; k < m; k++) {//Расшифровка
-		
-		char * hash;
-		
-		hash = blocks[k];
-		blocks[k] = swapstart(blocks[k]);
-		free(hash);
-
-		for (j = 0; j < 4; j++) {
-			char change_a;
-			change_a = blocks[k][j];
-			blocks[k][j] = blocks[k][j+4];
-			blocks[k][j+4]= change_a;
-		}
-		for(i = 0; i < 16; i++) {
-			char * left, leftnull[4] = {blocks[k][0],blocks[k][1],blocks[k][2],blocks[k][3]};
-			char * right = blocks[k]+4;
+	for (d = 2; d >= 0; d--) {//TripleDES
+		char ** all_keys = keys_create(key[d]);	
+		for (k = 0; k < m; k++) {//Расшифровка
 			
-			left = expansion(blocks[k]);
-			
-			hash = left;
-			left = keyxor(left,all_keys[15-i], 48);
+			char * hash;
+		
+			hash = blocks[k];
+			blocks[k] = swapstart(blocks[k]);
 			free(hash);
 
-			hash = left;
-			left = transformation_s(left);
-			free(hash);
-
-			hash = left;
-			left = Perestanovkap(left);
-			free(hash);
-
-			hash = left;
-			left = keyxor(left,right, 32);
-			free(hash);
-
-			for(j = 0; j < 4; j++) {
-				blocks[k][j + 4] = leftnull[j];
-				blocks[k][j] = left[j]; 
+			for (j = 0; j < 4; j++) {
+				char change_a;
+				change_a = blocks[k][j];
+				blocks[k][j] = blocks[k][j+4];
+				blocks[k][j+4]= change_a;
 			}
-			free(left);
+			for(i = 0; i < 16; i++) {
+				char * left, leftnull[4] = {blocks[k][0],blocks[k][1],blocks[k][2],blocks[k][3]};
+				char * right = blocks[k]+4;
+			
+				left = expansion(blocks[k]);
+			
+				hash = left;
+				left = keyxor(left,all_keys[15-i], 48);
+				free(hash);
+
+				hash = left;
+				left = transformation_s(left);
+				free(hash);
+
+				hash = left;
+				left = Perestanovkap(left);
+				free(hash);
+
+				hash = left;
+				left = keyxor(left,right, 32);
+				free(hash);
+
+				for(j = 0; j < 4; j++) {
+					blocks[k][j + 4] = leftnull[j];
+					blocks[k][j] = left[j]; 
+				}
+				free(left);
+			}
+
+			hash = blocks[k];
+			blocks[k] = swapend(blocks[k]);
+			free(hash);
 		}
-
-		hash = blocks[k];
-		blocks[k] = swapend(blocks[k]);
-		free(hash);
+		
+		for (i = 0; i < 16; i++)
+			free(all_keys[i]);
+		free(all_keys);
 	}
-
 
 	printf("Ваше сообщение:\n");
 	for (i = 0; i < m; i++)
@@ -172,10 +187,6 @@ int main() {
 			printf("%c", blocks[i][j]);
 	printf("\n");
 	
-
-	for (i = 0; i < 16; i++)
-		free(all_keys[i]);
-	free(all_keys);
 	for (i = 0; i < m; i++)
 		free(blocks[i]);
 	free(blocks);

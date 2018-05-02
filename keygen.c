@@ -7,7 +7,6 @@
 char *random_key() { //выдает рандомный ключ
 	char *a =malloc(7*sizeof(char));
 	int i;
-	srand(time(NULL));
 	for (i = 0; i < 7; i++)
 		a[i] = rand() % 256;
 	return a;
