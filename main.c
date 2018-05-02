@@ -1,6 +1,7 @@
 #include <time.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <omp.h>
 #include "keygen.h"
 #include "bitwise.h"
 #include "summ.h"
@@ -47,7 +48,6 @@ int main() {
 	}
 	str[i] = 0x0;
 	int m, d;
-
 	//Разбиение на блоки
 	char ** blocks = blocks_break(str, &m); 
 
@@ -66,12 +66,12 @@ int main() {
 		}
 		printf("\n");
 
+		#pragma omp parallel for
 		for (k = 0; k < m; k++) {//шифрование
 			char * hash;
 			hash = blocks[k];
 			blocks[k] = swapstart(blocks[k]);
 			free(hash);
-
 			for(i = 0; i < 16; i++) {
 				char * right, rightnull[4] = {blocks[k][4],blocks[k][5],blocks[k][6],blocks[k][7]};
 				char * left = blocks[k];
@@ -128,6 +128,7 @@ int main() {
 	printf("\n");
 	for (d = 2; d >= 0; d--) {//TripleDES
 		char ** all_keys = keys_create(key[d]);	
+		#pragma omp parallel for
 		for (k = 0; k < m; k++) {//Расшифровка
 			
 			char * hash;
@@ -186,6 +187,9 @@ int main() {
 		for (j = 0; j < 8; j++)
 			printf("%c", blocks[i][j]);
 	printf("\n");
+	
+	for (i = 0; i < 3; i++)
+		free(key[i]);
 	
 	for (i = 0; i < m; i++)
 		free(blocks[i]);
